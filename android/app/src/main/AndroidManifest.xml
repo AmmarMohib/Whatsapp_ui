@@ -4,6 +4,7 @@
         android:label="whatsap_ui"
         android:icon="@mipmap/ic_launcher">
         <activity
+            android:requestLegacyExternalStorage="true"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
