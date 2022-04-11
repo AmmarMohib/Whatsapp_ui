@@ -108,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(verificationId);
       },
     );
+    Fluttertoast.showToast(msg: 'Wait for a while, so the app will send you verification code',fontSize: 20,backgroundColor: Colors.green);
   }
 
   void verifyOTP() async {

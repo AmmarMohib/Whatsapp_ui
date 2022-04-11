@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:whatsap_ui/chats.dart';
+import 'package:whatsap_ui/settings.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -35,26 +37,36 @@ class _HomeState extends State<Home> {
               },
             ),
             PopupMenuButton(
+                onSelected: (result) {
+                  if (result == 5) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    );
+                  } else if (result == 1) {
+                    Fluttertoast.showToast(msg: 'group');
+                  }
+                },
                 color: Colors.white,
                 itemBuilder: (context) => [
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 1,
                         child: Text("New group"),
                       ),
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 2,
                         child: Text("New broadcast"),
                       ),
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 3,
                         child: Text("Linked Devices"),
                       ),
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 4,
                         child: Text("Starred messages"),
                       ),
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 5,
                         child: Text("Settings"),
                       )
                     ]),
