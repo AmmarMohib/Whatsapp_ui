@@ -97,7 +97,7 @@ class _GetInfoState extends State<GetInfo> {
     if (_url == null) {
       Fluttertoast.showToast(msg: 'wait for uploading image, then retry');
     } else {
-      firestoreInstance.collection("usersInfo").add({
+      firestoreInstance.collection("usersInfo").doc(FirebaseAuth.instance.currentUser!.uid).set({
         "name": nameController.text,
         "phoneNum": FirebaseAuth.instance.currentUser!.phoneNumber,
         "user-img": _url

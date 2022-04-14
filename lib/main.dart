@@ -1,7 +1,11 @@
+// ignore_for_file: unnecessary_null_comparison, await_only_futures, unused_import
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:whatsap_ui/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:whatsap_ui/checkuser.dart';
 import 'package:whatsap_ui/firebase_options.dart';
+// import 'package:whatsap_ui/home.dart';
 import 'package:whatsap_ui/login.dart';
 
 void main() async {
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: CheckUser(),
     );
   }
 }

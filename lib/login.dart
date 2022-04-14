@@ -2,6 +2,8 @@ import 'package:whatsap_ui/getInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:whatsap_ui/home.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,9 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool otpVisibility = false;
 
   String verificationID = "";
-
   @override
   Widget build(BuildContext context) {
+   // ignore: unnecessary_null_comparison
+   
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -108,7 +111,10 @@ class _LoginScreenState extends State<LoginScreen> {
         print(verificationId);
       },
     );
-    Fluttertoast.showToast(msg: 'Wait for a while, so the app will send you verification code',fontSize: 20,backgroundColor: Colors.green);
+    Fluttertoast.showToast(
+        msg: 'Wait for a while, so the app will send you verification code',
+        fontSize: 20,
+        backgroundColor: Colors.green);
   }
 
   void verifyOTP() async {
@@ -130,12 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     ).whenComplete(
       () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GetInfo(),
-          ),
-        );
+   Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => GetInfo()));
       },
     );
   }
