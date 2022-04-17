@@ -2,7 +2,6 @@ import 'package:whatsap_ui/getInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:whatsap_ui/home.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -101,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       verificationFailed: (FirebaseAuthException e) {
         print(e.message);
-      },
+      }, 
       codeSent: (String verificationId, int? resendToken) {
         otpVisibility = true;
         verificationID = verificationId;

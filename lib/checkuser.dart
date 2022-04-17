@@ -13,16 +13,18 @@ class CheckUser extends StatefulWidget {
 class _CheckUserState extends State<CheckUser> {
   @override
   Widget build(BuildContext context) {
+    var ch = FirebaseAuth.instance.currentUser;
     // ignore: unnecessary_null_comparison
-    if (FirebaseAuth.instance.currentUser!.uid == null) {
+    if (ch?.uid != null) {
       // Navigator.of(context)
       //     .push(MaterialPageRoute(builder: (context) => LoginScreen()));
       Future.delayed(Duration.zero, () {
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen()));
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Home()));
       });
     } else {
+      
       Future.delayed(Duration.zero, () {
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Home()));
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen()));
       });
     }
     return Container();

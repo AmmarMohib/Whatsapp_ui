@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:whatsap_ui/chats.dart';
+import 'package:whatsap_ui/contacts.dart';
 import 'package:whatsap_ui/settings.dart';
 
 class Home extends StatefulWidget {
@@ -17,6 +18,7 @@ var searchbox = {
 };
 
 class _HomeState extends State<Home> {
+  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -39,10 +41,7 @@ class _HomeState extends State<Home> {
             PopupMenuButton(
                 onSelected: (result) {
                   if (result == 5) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsPage()),
-                    );
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => SettingsPage()));
                   } else if (result == 1) {
                     Fluttertoast.showToast(msg: 'group');
                   }
@@ -116,7 +115,7 @@ class _HomeState extends State<Home> {
           ]),
         ),
         body: TabBarView(
-          children: [Chats(), Chats(), Text("data")],
+          children: [Chats(), Chats(), Contacts()],
         ),
       ),
     );

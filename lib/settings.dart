@@ -79,12 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     leading: IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Home(),
-                          ),
-                        );
+                        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Home()));
                       },
                     ),
                     title: Text("Settings"),

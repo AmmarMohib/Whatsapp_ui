@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.whatsap_ui">
+<uses-permission android:name="android.permission.READ_CONTACTS" />  
+<uses-permission android:name="android.permission.WRITE_CONTACTS" />
    <application
         android:label="whatsap_ui"
         android:icon="@mipmap/ic_launcher">
