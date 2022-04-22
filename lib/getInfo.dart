@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,10 @@ class _GetInfoState extends State<GetInfo> {
     if (_url == null) {
       Fluttertoast.showToast(msg: 'wait for uploading image, then retry');
     } else {
+      firestoreInstance.collection("numbers&avatars").add({
+        "num" : FirebaseAuth.instance.currentUser!.phoneNumber,
+        "avatar" : _url
+      });
       firestoreInstance.collection("usersInfo").doc(FirebaseAuth.instance.currentUser!.uid).set({
         "name": nameController.text,
         "phoneNum": FirebaseAuth.instance.currentUser!.phoneNumber,
