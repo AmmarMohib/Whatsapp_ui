@@ -100,7 +100,8 @@ class _GetInfoState extends State<GetInfo> {
     } else {
       firestoreInstance.collection("numbers&avatars").add({
         "num" : FirebaseAuth.instance.currentUser!.phoneNumber,
-        "avatar" : _url
+        "avatar" : _url,
+        "name" : FirebaseAuth.instance.currentUser!.displayName
       });
       firestoreInstance.collection("usersInfo").doc(FirebaseAuth.instance.currentUser!.uid).set({
         "name": nameController.text,
