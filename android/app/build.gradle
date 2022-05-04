@@ -36,8 +36,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.whatsap_ui"
-        minSdkVersion 23
-        targetSdkVersion 31
+        minSdkVersion 19
+        targetSdkVersion 19
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

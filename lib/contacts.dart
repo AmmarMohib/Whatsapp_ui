@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:whatsap_ui/chatpage.dart';
+import 'package:whatsap_ui/chats.dart';
 
 class Contacts extends StatefulWidget {
   const Contacts({Key? key}) : super(key: key);
@@ -30,50 +32,6 @@ class _ContactsState extends State<Contacts> {
   }
 
   Widget build(BuildContext context) {
-    //   return MaterialApp(
-    //       home: Scaffold(
-    //           //         body: ListView.builder(
-    //           //   itemCount: Allcontacts.length,
-    //           //   itemBuilder: (context, index) {
-    //           //     Contact contact = Allcontacts[index];
-    //           //     return ListTile(
-    //           //       title: Text(contact.displayNam),
-    //           //     );
-    //           //   },
-    //           // )
-    //           // body: ElevatedButton(
-    //           //   child: Text("press"),
-    //           //   onPressed: abc,
-    //           // ),
-    //           body:
-
-    //       (Allcontacts == null)
-    //           ? Center(
-    //               child: CircularProgressIndicator(),
-    //             )
-    //           : ListView.builder(
-    //               itemCount: firephonenum.toString().length,
-    //               itemBuilder: (context, index) {
-    //                 return ListTile(
-    //                   title: Text(firephonenum.toString()),
-    //                   //  leading: CircleAvatar(backgroundImage: MemoryImage(Allcontacts![index].avatar!),),
-    //                   //  leading:  Allcontacts![index].avatar != null
-    //                   //                   ? ClipOval(
-    //                   //                       child: CircleAvatar(
-    //                   //                         backgroundImage: MemoryImage(Allcontacts![index].avatar!),                                )
-    //                   //                     )
-    //                   //                   : CircleAvatar(
-    //                   //                       maxRadius: 60,
-    //                   //                       child: Icon(
-    //                   //                         Icons.account_circle_rounded,
-    //                   //                         size: 128,
-    //                   //                       ),
-    //                   //                       backgroundColor: Colors.transparent,
-    //                   //                     ),
-    //                 );
-    //               },
-    //             ),
-
     // ));
     final Stream<QuerySnapshot> _usersStream =
         FirebaseFirestore.instance.collection('numbers&avatars').snapshots();
@@ -92,7 +50,9 @@ class _ContactsState extends State<Contacts> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
-            return ListTile(
+            return  ListTile(
+                onTap: () =>
+                    contactpopup(data['Uid'], data['avatar'], data['name'],data['num']),
                 leading: data != null
                     ? ClipOval(
                         child: CircleAvatar(
@@ -104,9 +64,9 @@ class _ContactsState extends State<Contacts> {
                           Icons.account_circle_rounded,
                           size: 128,
                         ),
-                        backgroundColor: Colors.transparent,
+                        // backgroundColor: Colors.transparent,
                       ),
-                title: Text(data['num']));
+                title: Text(data['name']));
           }).toList(),
         );
       },
@@ -123,10 +83,6 @@ class _ContactsState extends State<Contacts> {
       querySnapshot.docs.forEach((doc) {
         print(doc.get('num').toString().length);
         // print("id" + doc.id);
-        setState(() {
-          firephonenum = doc.get('num');
-          fireUserUID = doc.id;
-        });
       });
     });
 
@@ -143,7 +99,6 @@ class _ContactsState extends State<Contacts> {
       Allcontacts = contacts;
       chPhones = johns;
     });
-    // print(contacts.map((e) => print(e.phones!.map((e) => print(e.value)))));
     var a = contacts.map((e) => e.displayName);
     var b = contacts;
     if (a != null) {
@@ -153,19 +108,41 @@ class _ContactsState extends State<Contacts> {
     }
     // Get all contacts without thumbnail (faster)
     print(johns.map((e) => e.phones!.first.value));
-    // print("firephonenum" + fireUserData);
-    // ignore: unused_local_variable
-//         var projectId = "com.example.whatsap_ui";
-// await FirebaseAdmin.instance.initializeApp(
-//   AppOptions(
-//     credential: await Credentials.firebaseAdminCredentialPath.
-//     )
-// ).auth().getUserByPhoneNumber(chPhones?[chPhones!.length].phones?.first.value.toString() ?? "")
-//      .then((userRecord) => print("userUID=" + userRecord.uid))
-//      .catchError((error) => print(error));
     var ag = await firephonenum;
     print("the data : " + await ag.toString().characters.toString());
   }
 
-  
+  Future contactpopup(String string, data, name,num) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: Stack(
+            clipBehavior: Clip.antiAlias,
+            children: <Widget>[
+              TextButton(
+                  onPressed: () => firepush(string, data, name,num),
+                  child: Text(
+                    "chat with contact",
+                    style: TextStyle(color: Colors.black),
+                  )),
+            ],
+          ));
+        });
+  }
+
+  firepush(string, data, name,num) {
+    print(string);
+    print(FirebaseAuth.instance.currentUser!.phoneNumber);
+    print(string);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChattingPage(
+                  uid: string.toString(),
+                  avatar: data,
+                  name: name,
+                  num: num,  
+                )));
+  }
 }
