@@ -158,6 +158,7 @@ class _GetInfoState extends State<GetInfo> {
     if (PickedFile == null) {
       Fluttertoast.showToast(msg: 'please upload user Image');
     }
+    
     else{
       final FirebaseStorage storage = FirebaseStorage.instance;
 

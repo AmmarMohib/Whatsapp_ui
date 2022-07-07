@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,9 +51,9 @@ class _ContactsState extends State<Contacts> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
-            return  ListTile(
-                onTap: () =>
-                    contactpopup(data['Uid'], data['avatar'], data['name'],data['num']),
+            return ListTile(
+                onTap: () => contactpopup(
+                    data['Uid'], data['avatar'], data['name'], data['num']),
                 leading: data != null
                     ? ClipOval(
                         child: CircleAvatar(
@@ -112,7 +113,7 @@ class _ContactsState extends State<Contacts> {
     print("the data : " + await ag.toString().characters.toString());
   }
 
-  Future contactpopup(String string, data, name,num) {
+  Future contactpopup(String string, data, name, num) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -121,7 +122,7 @@ class _ContactsState extends State<Contacts> {
             clipBehavior: Clip.antiAlias,
             children: <Widget>[
               TextButton(
-                  onPressed: () => firepush(string, data, name,num),
+                  onPressed: () => firepush(string, data, name, num),
                   child: Text(
                     "chat with contact",
                     style: TextStyle(color: Colors.black),
@@ -131,18 +132,18 @@ class _ContactsState extends State<Contacts> {
         });
   }
 
-  firepush(string, data, name,num) {
+  firepush(string, data, name, num) {
     print(string);
     print(FirebaseAuth.instance.currentUser!.phoneNumber);
     print(string);
-    Navigator.pushReplacement(
+    Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChattingPage(
                   uid: string.toString(),
                   avatar: data,
                   name: name,
-                  num: num,  
+                  num: num,
                 )));
   }
 }

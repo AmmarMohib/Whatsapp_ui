@@ -2,7 +2,7 @@ permission_handler: ^5.0.0
 contacts_service: ^0.3.10
 url_launcher: ^5.4.2
 name: whatsap_ui
-description: A new Flutter project.
+description: A clone of whatsapp made by Ammar.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -40,8 +40,10 @@ dependencies:
   firebase_admin: ^0.2.0-dev.7
   contacts_service: ^0.6.3
   permission_handler: ^9.2.0
-
-
+  flutter_native_splash: ^2.1.6
+  intl: ^0.17.0
+flutter_native_splash:
+  color: "#42a5f5"
 
 
 

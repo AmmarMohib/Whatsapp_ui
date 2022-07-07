@@ -31,9 +31,9 @@ class _ChatsState extends State<Chats> {
                 children: [
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                            .collection("chatting users")
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .collection("profiledata")
+                    .collection("Chats")
+                        .doc("users")
+                        .collection(FirebaseAuth.instance.currentUser!.uid)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -79,86 +79,6 @@ class _ChatsState extends State<Chats> {
                       );
                     },
                   ),
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "Ali",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
-                  //     ],
-                  //   ),
-                  //   Row(
-                  //     children: [
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "Asad",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
-                  //     ],
-                  //   ),
-                  //   Row(
-                  //     children: [
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "Qasim",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
-                  //     ],
-                  //   ),
-                  //   Row(
-                  //     children: [
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "asim",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
-                  //     ],
-                  //   ),
-                  //   Row(
-                  //     children: [
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "doctor",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
-                  //     ],
-                  //   ),
-                  //   Row(
-                  //     children: [
-                  //       CircleAvatar(
-                  //         radius: 30.0,
-                  //         backgroundImage: NetworkImage(
-                  //             'https://image.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
-                  //       Text(
-                  //         "police",
-                  //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //       )
                 ],
               ),
             ],
@@ -169,8 +89,6 @@ class _ChatsState extends State<Chats> {
   }
 
   goChats(uid, name, avatar) async {
-    // List<Contact> johns =
-    // await ContactsService.getContactsForPhone(firephonenum.toString());
     print(uid);
     print(name);
     print(avatar);
@@ -183,13 +101,5 @@ class _ChatsState extends State<Chats> {
                 uid: uid,
               )),
     );
-    // Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => ChattingPage(
-    //               name: name,
-    //               avatar: avatar,
-    //               uid: uid,
-    //             )));
   }
 }

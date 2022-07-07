@@ -1,252 +1,457 @@
+// ignore_for_file: non_constant_identifier_names
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
-class ChattingPage extends StatelessWidget {
+class ChattingPage extends StatefulWidget {
   ChattingPage({Key? key, this.avatar, this.name, this.uid, this.num})
       : super(key: key);
-  var b;
   var num;
-  TextEditingController chatController = TextEditingController();
   var uid;
   final avatar;
   final name;
+
+  @override
+  State<ChattingPage> createState() => _ChattingPageState();
+}
+
+class _ChattingPageState extends State<ChattingPage> {
+  var CAB;
+  bool _messageSelected = true;
+  void appBarChange() {
+    setState(() {
+      _messageSelected = !_messageSelected;
+    });
+  }
+
+  var b;
+
+  TextEditingController chatController = TextEditingController();
+
   var firePhoneNum;
   var docname;
 
-  @override
-  Widget build(BuildContext context) {
-    if (uid == null) {
-      print("no uid found");
-    } else {
-      print("uid" + uid);
-    }
-    // ignore: unused_local_variable
-    var docId =
-        uid.toString().compareTo(FirebaseAuth.instance.currentUser!.uid) > 0
-            ? uid! + FirebaseAuth.instance.currentUser!.uid
-            : FirebaseAuth.instance.currentUser!.uid + uid!;
-    if (uid!.toString().length >
-        FirebaseAuth.instance.currentUser!.uid.length) {
-      docname = uid! + FirebaseAuth.instance.currentUser!.uid;
-    } else {
-      docname = FirebaseAuth.instance.currentUser!.uid + uid!;
-    }
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        // title: name,
-        backgroundColor: Color.fromRGBO(7, 95, 86, 1),
-        leading: Row(
-          children: [
-            // SizedBox(width: 100,),
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            // SizedBox(width: 100,),
-          ],
+  var e;
+  Widget _defaultBar(BuildContext context, Function changeAppBar) {
+    CAB = appBarChange;
+    return AppBar(
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      backgroundColor: Color.fromRGBO(7, 95, 86, 1),
+      leading: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
-
-        // title: name,
-        // CircleAvatar(backgroundImage: NetworkImage(avatar),),
-        actions: [
+      ),
+      title: Row(
+        children: [
           Container(
-            margin: const EdgeInsets.only(right: 160),
-            child: Stack(
-              children: [
-                // CircleAvatar(
-                //   backgroundImage: NetworkImage(avatar,),radius: 20,
-                // ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 87),
-                  child: ClipOval(
-                    child: Image.network(
-                      avatar,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 60, top: 20),
-                  child: Text(
-                    name,
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ],
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: NetworkImage(widget.avatar),
+                fit: BoxFit.cover,
+              ),
             ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      // appBar: ,
-      body: Column(
-        children: <Widget>[
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("Chats")
-                .doc(docId)
-                .collection("messages")
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Text('Something went wrong');
-              }
+      actions: [
+        IconButton(
+          icon: Icon(Icons.videocam, size: 20),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.call, size: 20),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.more_vert, size: 20),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading");
-              }
-              return Expanded(
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    Map<String, dynamic> data =
-                        document.data()! as Map<String, dynamic>;
-                        var nu = data[FirebaseAuth.instance.currentUser!.uid];
-                    return Row(
-                      children: [
-                        Text("d=""$nu",style: TextStyle(backgroundColor: Colors.green),),
-                      (data[uid!]!=null) ? Text(data[uid!]):Text("")
-                      ],
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
-          // StreamBuilder<QuerySnapshot>(
-          //   stream: FirebaseFirestore.instance
-          //       .collection("Chats")
-          //       .doc(docId)
-          //       .collection("messages")
-          //       .snapshots(),
-          //   builder:
-          //       (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          //     if (snapshot.hasError) {
-          //       return Text('Something went wrong');
-          //     }
+  Widget _editingBar(BuildContext context, Function changeAppBar) {
+    return AppBar(
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      backgroundColor: Color.fromRGBO(7, 95, 86, 1),
+      leading: IconButton(
+        icon: Icon(Icons.delete),
+        color: Theme.of(context).iconTheme.color,
+        onPressed: () {
+//          ;
+//       var docRef =  FirebaseFirestore.instance
+//                           .collection("Chats")
+//                           .doc(widget.uid
+//                 .toString()
+//                 .compareTo(FirebaseAuth.instance.currentUser!.uid) >
+//             0
+//         ? widget.uid! + FirebaseAuth.instance.currentUser!.uid
+//         : FirebaseAuth.instance.currentUser!.uid + widget.uid!).collection("messages").doc();
 
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return Text("Loading");
-          //     }
+//                           final updates = <String, dynamic>{
+//   "messages": FieldValue.delete(),
+// };
 
-          //     return Expanded(
-          //       child: ListView(
-          //         children:
-          //             snapshot.data!.docs.map((DocumentSnapshot document) {
-          //           Map<String, dynamic> data =
-          //               document.data()! as Map<String, dynamic>;
-          //           return ListTile(
-          //             title:
-          //                data!=null? Text(data[FirebaseAuth.instance.currentUser!.uid]):null,
-          //             // subtitle: Text(data['company']),
+// docRef.update(updates);
 
-          //             subtitle:data!=null ?Text(data[uid!]):null,
+//           CAB();
+//           // CAB = changeAppBar();
+FirebaseFirestore.instance.collection("Chats").doc(widget.uid
+                .toString()
+                .compareTo(FirebaseAuth.instance.currentUser!.uid) >
+            0
+        ? widget.uid! + FirebaseAuth.instance.currentUser!.uid
+        : FirebaseAuth.instance.currentUser!.uid + widget.uid!).collection("messages").get().then((value) => print(value.docs.map((e) => print(e.get(FirebaseAuth.instance.currentUser!.uid)))));
+        FirebaseFirestore.instance.collection("Chats").doc(widget.uid
+                .toString()
+                .compareTo(FirebaseAuth.instance.currentUser!.uid) >
+            0
+        ? widget.uid! + FirebaseAuth.instance.currentUser!.uid
+        : FirebaseAuth.instance.currentUser!.uid + widget.uid!).collection('messages').get()
+    .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+               doc.reference.update({widget.uid: FieldValue.delete()}).whenComplete((){
+  print('Field Deleted');
+});
+        });
+});
+        },
+      ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.check),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.event),
+        ),
+      ],
+    );
+  }
 
-          //           );
-          //         }).toList(),
-          //       ),
-          //     );
-          //   },
-          // ),
-          Container(
-              padding: EdgeInsets.symmetric(vertical: 2.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                // First child is enter comment text input
-                Expanded(
-                  child: TextFormField(
-                    controller: chatController,
-                    autocorrect: false,
-                    decoration: new InputDecoration(
-                      labelText: "Some Text",
-                      labelStyle:
-                          TextStyle(fontSize: 20.0, color: Colors.white),
-                      fillColor: Colors.blue,
-                      border: OutlineInputBorder(
-                          // borderRadius:
-                          //     BorderRadius.all(Radius.zero(5.0)),
-                          borderSide: BorderSide(color: Colors.purpleAccent)),
+  @override
+  Widget build(BuildContext context) {
+    if (widget.uid == null) {
+      print("no uid found");
+    } else {
+      print("uid" + widget.uid);
+    }
+    // ignore: unused_local_variable
+    var docId = widget.uid
+                .toString()
+                .compareTo(FirebaseAuth.instance.currentUser!.uid) >
+            0
+        ? widget.uid! + FirebaseAuth.instance.currentUser!.uid
+        : FirebaseAuth.instance.currentUser!.uid + widget.uid!;
+    if (widget.uid!.toString().length >
+        FirebaseAuth.instance.currentUser!.uid.length) {
+      docname = widget.uid! + FirebaseAuth.instance.currentUser!.uid;
+    } else {
+      docname = FirebaseAuth.instance.currentUser!.uid + widget.uid!;
+    }
+    return MaterialApp(
+        home: Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: _messageSelected
+            ? _defaultBar(context, appBarChange)
+            : _editingBar(context, appBarChange),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Chats")
+                  .doc(docId)
+                  .collection("messages")
+                  .orderBy('sentdate')
+                  .orderBy('sentOn')
+                  .snapshots(includeMetadataChanges: true),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading");
+                }
+                return Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                (data[FirebaseAuth.instance.currentUser!.uid] !=
+                                        null)
+                                    ? InkWell(
+                                        onLongPress: () {
+                                          this.activate();
+                                          print("long pressed");
+                                          CAB();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade200,
+                                            borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(20),
+                                              bottomLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(13.0),
+                                            child: Row(
+                                              children: [
+                                                (data[FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .uid] !=
+                                                        null)
+                                                    ? Text(
+                                                        "${data[FirebaseAuth.instance.currentUser!.uid]} ",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black),
+                                                      )
+                                                    : Text(
+                                                        "",
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                (data[FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .uid] !=
+                                                        null)
+                                                    ? Text(
+                                                        data['sentOn'],
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                        ),
+                                                      )
+                                                    : Text("")
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                (data[widget.uid] != null)
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(13.0),
+                                          child: Column(
+                                            children: [
+                                              Text(widget.name),
+                                              Row(
+                                                children: [
+                                                  (data[widget.uid] != null)
+                                                      ? Text(
+                                                          "${data[widget.uid]} ",
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.black),
+                                                        )
+                                                      : Container(),
+                                                  (data[widget.uid!] != null)
+                                                      ? Text(
+                                                          data['sentOn'],
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                          ),
+                                                        )
+                                                      : Container()
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 2.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  // First child is enter comment text input
+                  Expanded(
+                    child: TextFormField(
+                      controller: chatController,
+                      autocorrect: false,
+                      decoration: new InputDecoration(
+                        labelText: "Some Text",
+                        labelStyle:
+                            TextStyle(fontSize: 20.0, color: Colors.white),
+                        fillColor: Colors.blue,
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.purpleAccent)),
+                      ),
                     ),
                   ),
-                ),
-                // Second child is button
-                IconButton(
-                  icon: Icon(Icons.send),
-                  iconSize: 20.0,
-                  onPressed: () async {
-                    print(chatController.text);
-                    // await FirebaseFirestore.instance
-                    //     .collection("Chats")
-                    //     .doc(docId)
-                    //     .collection("messages")
-                    //     .add({
-                    //   FirebaseAuth.instance.currentUser!.uid:
-                    //       chatController.text,
-                    // }).then((value) => () {
-                    //           b = uid;
-                    //         });
-                    var ref = FirebaseAuth.instance.currentUser!.uid;
-                    FirebaseFirestore.instance
-                        .collection("Chats")
-                        .doc(docId)
-                        .collection("messages")
-                        .add({
-                      "$ref": chatController.text,
-                    });
-                    chatController.clear();
-                    print(docId);
-                    // await FirebaseFirestore.instance
-                    //     .collection('Chats')
-                    //     .doc(uid! + FirebaseAuth.instance.currentUser!.uid)
-                    //     .collection("messages")
-                    //     .get()
-                    //     .then((QuerySnapshot querySnapshot) {
-                    //   querySnapshot.docs.forEach((doc) {
-                    //     print(doc['PhoneNum']);
-                    //   });
-                    // });
-                    await FirebaseFirestore.instance
-                        .collection("Chats")
-                        .doc(docId)
-                        .collection("messages")
-                        .get()
-                        .then((value) => print(
-                            value.docs.map((e) => print(e.data().toString()))));
-                    FirebaseFirestore.instance
-                        .collection("chatting users")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .get()
-                        .then((DocumentSnapshot documentSnapshot) {
-                      if (documentSnapshot.exists) {
-                        print('doc exists');
-                      } else {
-                        FirebaseFirestore.instance
-                            .collection("chatting users")
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .collection("profiledata")
-                            .add({
-                          "PhoneNum": num,
-                          "avatar": avatar,
-                          "uid": FirebaseAuth.instance.currentUser!.uid,
-                          "name": name,
-                        });
-                      }
-                    });
-                  },
-                )
-              ])),
-        ],
+                  // Second child is button
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    iconSize: 20.0,
+                    onPressed: () async {
+                      print(chatController.text);
+                      // DateTime now = DateTime.now();
+// print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());
+                      FirebaseFirestore.instance.settings = const Settings(
+                        persistenceEnabled: true,
+                        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+                      );
+
+                      DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+                      final now = new DateTime.now();
+                      String formatter =
+                          DateFormat('yMd').format(now); // 28/03/2020
+                      print(formatter);
+                      print(dateFormat);
+                      dynamic currentTime =
+                          DateFormat.jm().format(DateTime.now());
+                      e = currentTime;
+                      var ref = FirebaseAuth.instance.currentUser!.uid;
+                      FirebaseFirestore.instance
+                          .collection("Chats")
+                          .doc(docId)
+                          .collection("messages")
+                          .add({
+                        "$ref": chatController.text,
+                        "sentOn": currentTime,
+                        "sentdate": formatter
+                      });
+                      await FirebaseFirestore.instance
+                          .collection("Chats")
+                          .doc("users")
+                          .collection(FirebaseAuth.instance.currentUser!.uid)
+                          .get()
+                          .then((snapshot) {
+                        var data = snapshot.docs.map((e) => e.get('uid'));
+                        // print(snapshot.docs.length == 0);
+                        print(data);
+                        // ignore: unrelated_type_equality_checks
+                        if (data.length == 0) {
+                          print("No collection");
+                          FirebaseFirestore.instance
+                              .collection("Chats")
+                              .doc("users")
+                              .collection(
+                                  FirebaseAuth.instance.currentUser!.uid)
+                              .add({
+                            "uid": widget.uid,
+                            "name": widget.name,
+                            "avatar": widget.avatar
+                          });
+                        }
+                      });
+                      await FirebaseFirestore.instance
+                          .collection("Chats")
+                          .doc("users")
+                          .collection(widget.uid)
+                          .get()
+                          .then((snapshot) {
+                        // print(snapshot.docs.length == 0);
+                        var data = snapshot.docs.map((e) => e.get('uid'));
+                        // ignore: unrelated_type_equality_checks
+                        if (data.length == 0) {
+                          FirebaseFirestore.instance
+                              .collection("usersInfo")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .get()
+                              .then((snapshot) {
+                            print("No collection");
+                            var name = snapshot.get('name');
+                            var userimg = snapshot.get('user-img');
+                            FirebaseFirestore.instance
+                                .collection("Chats")
+                                .doc("users")
+                                .collection(widget.uid)
+                                .add({
+                              "uid": FirebaseAuth.instance.currentUser!.uid,
+                              "name": name,
+                              "avatar": userimg
+                            });
+                          });
+                        }
+                      });
+
+                      chatController.clear();
+                      print(docId);
+                    },
+                  )
+                ])),
+          ],
+        ),
       ),
     ));
   }

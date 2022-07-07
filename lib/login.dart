@@ -99,7 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
       verificationFailed: (FirebaseAuthException e) {
+        
+          Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => LoginScreen()));
         print(e.message);
+        
       }, 
       codeSent: (String verificationId, int? resendToken) {
         otpVisibility = true;
@@ -108,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         print(verificationId);
+       
       },
     );
     Fluttertoast.showToast(
@@ -119,7 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void verifyOTP() async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationID, smsCode: otpController.text);
-
     await auth.signInWithCredential(credential).then(
       (value) {
         print("You are logged in successfully");
