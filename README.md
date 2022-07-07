@@ -1,16 +1,9 @@
 # whatsap_ui
 
-A new Flutter project.
+This is the clone of whatsapp that is made by Ammar. I am developing this whatsapp clone in flutter using firebase authentication and firestore.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To test this App you have to download the repository then if flutter is set up in your computer so connect emulator and type flutter run. 
+If flutter is not set up in your computer so go to te below link:
+https://docs.flutter.dev/get-started/install
