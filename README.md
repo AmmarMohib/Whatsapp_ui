@@ -4,6 +4,7 @@ This is the clone of whatsapp that is made by Ammar. I am developing this whatsa
 
 ## Getting Started
 
-To test this App you have to download the repository then if flutter is set up in your computer so connect emulator and type flutter run. 
+To run this App you have to download the repository then if flutter is set up in your computer so connect emulator and type flutter run. 
 If flutter is not set up in your computer so go to te below link:
 https://docs.flutter.dev/get-started/install
+note: If liked do not forget to stare this clone of whatsapp
