@@ -127,6 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   controller: otpController,
                   decoration: InputDecoration(
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: maincolor)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: maincolor)),
                     hintText: 'OTP',
                     prefix: Padding(
                       padding: EdgeInsets.all(4),

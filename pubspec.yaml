@@ -43,6 +43,8 @@ dependencies:
   flutter_native_splash: ^2.1.6
   intl: ^0.18.1
   country_picker: ^2.0.20
+  font_awesome_flutter: ^10.4.0
+  emoji_picker_flutter: ^1.5.4
 flutter_native_splash:
   color: "#42a5f5"
 
